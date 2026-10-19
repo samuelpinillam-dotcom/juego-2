@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Aventura Matemática - Juego Educativo</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    h1, h2, h3, .font-heading {
+      font-family: 'Fredoka', cursive;
+    }
+    .btn-press {
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .btn-press:active {
+      transform: scale(0.96);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- BARRA SUPERIOR / HEADER -->
+  <header class="w-full bg-slate-800/80 backdrop-blur border-b border-slate-700/60 sticky top-0 z-50 px-3 py-2 sm:px-6 sm:py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 cursor-pointer" onclick="goToMenu()">
+        <div class="bg-indigo-600 text-white p-1.5 sm:p-2 rounded-xl shadow-lg shadow-indigo-600/30">
+          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <span class="font-heading text-lg sm:text-2xl font-bold tracking-wide bg-gradient-to-r from-indigo-300 via-sky-300 to-emerald-300 bg-clip-text text-transparent">
+          Aventura Matemática
+        </span>
+      </div>
+
+      <!-- PANEL DE VIDAS Y PROGRESO -->
+      <div id="gameHUD" class="hidden flex items-center gap-2 sm:gap-6 bg-slate-900/80 px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full border border-slate-700/80">
+        <div class="flex items-center gap-1" id="heartsContainer">
+          <span class="text-rose-500 text-base sm:text-xl">❤️</span>
+          <span class="text-rose-500 text-base sm:text-xl">❤️</span>
+          <span class="text-rose-500 text-base sm:text-xl">❤️</span>
+        </div>
+        <div class="h-4 w-px bg-slate-700"></div>
+        <div class="text-xs sm:text-sm font-bold text-slate-300">
+          <span id="currentQuestionNum" class="text-indigo-400">1</span>/10
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="w-full max-w-4xl mx-auto p-3 sm:p-6 flex-grow flex flex-col justify-center items-center">
+
+    <!-- MENÚ PRINCIPAL -->
+    <section id="menuScreen" class="w-full flex flex-col items-center text-center py-4 sm:py-8 space-y-6 sm:space-y-8">
+      <div class="space-y-2 max-w-xl">
+        <span class="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider">
+          Aprende Jugando
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+          Elige tu Desafío
+        </h1>
+        <p class="text-slate-400 text-xs sm:text-base">
+          Responde 10 preguntas por nivel. ¡Tienes 3 vidas en cada intento!
+        </p>
+      </div>
+
+      <!-- TARJETAS DE NIVELES -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full">
+
+        <!-- Nivel 1 -->
+        <div class="bg-slate-800/80 rounded-2xl p-5 border border-slate-700 flex flex-col justify-between space-y-4 hover:border-emerald-500/50 transition duration-200 group shadow-lg">
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 font-bold text-xl group-hover:scale-110 transition duration-200">
+              1
+            </div>
+            <div class="text-left">
+              <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition">Fracciones</h3>
+              <p class="text-slate-400 text-xs sm:text-sm mt-1">Identificación de gráficos de fracciones y partes pintadas.</p>
+            </div>
+          </div>
+          <button onclick="startLevel(1)" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 btn-press text-sm sm:text-base">
+            Jugar Nivel 1
+          </button>
+        </div>
+
+        <!-- Nivel 2 -->
+        <div class="bg-slate-800/80 rounded-2xl p-5 border border-slate-700 flex flex-col justify-between space-y-4 hover:border-sky-500/50 transition duration-200 group shadow-lg">
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-sky-500/10 border border-sky-500/20 rounded-xl flex items-center justify-center text-sky-400 font-bold text-xl group-hover:scale-110 transition duration-200">
+              2
+            </div>
+            <div class="text-left">
+              <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition">Ángulos y Triángulos</h3>
+              <p class="text-slate-400 text-xs sm:text-sm mt-1">Lados, ángulos de triángulos (180°) y tipos de figuras.</p>
+            </div>
+          </div>
+          <button onclick="startLevel(2)" class="w-full py-3 px-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl shadow-lg shadow-sky-600/20 btn-press text-sm sm:text-base">
+            Jugar Nivel 2
+          </button>
+        </div>
+
+        <!-- Nivel 3 -->
+        <div class="bg-slate-800/80 rounded-2xl p-5 border border-slate-700 flex flex-col justify-between space-y-4 hover:border-purple-500/50 transition duration-200 group shadow-lg">
+          <div class="space-y-3">
+            <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 font-bold text-xl group-hover:scale-110 transition duration-200">
+              3
+            </div>
+            <div class="text-left">
+              <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition">Divisiones y Potencias</h3>
+              <p class="text-slate-400 text-xs sm:text-sm mt-1">Divisiones con cantidades grandes, potencias y raíces simples.</p>
+            </div>
+          </div>
+          <button onclick="startLevel(3)" class="w-full py-3 px-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl shadow-lg shadow-purple-600/20 btn-press text-sm sm:text-base">
+            Jugar Nivel 3
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PANTALLA DE JUEGO -->
+    <section id="gameplayScreen" class="w-full hidden flex-col space-y-4 sm:space-y-6">
+      
+      <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <span id="levelBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-700 text-slate-300">
+            Categoría
+          </span>
+          <button onclick="goToMenu()" class="text-slate-400 hover:text-slate-200 text-xs font-semibold underline">
+            Salir al menú
+          </button>
+        </div>
+
+        <h2 id="questionText" class="text-lg sm:text-2xl font-bold text-white leading-relaxed">
+          Cargando pregunta...
+        </h2>
+
+        <div id="questionGraphicContainer" class="hidden justify-center items-center py-2 bg-slate-900/50 rounded-xl border border-slate-700/50">
+          <div id="questionGraphic" class="w-full max-w-xs flex justify-center"></div>
+        </div>
+      </div>
+
+      <!-- PARRILLA DE OPCIONES -->
+      <div id="optionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full"></div>
+
+      <!-- RETROALIMENTACIÓN -->
+      <div id="feedbackContainer" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-4 sm:p-5 shadow-xl flex-col space-y-3">
+        <div id="feedbackHeader" class="flex items-center gap-2 font-bold text-base sm:text-lg"></div>
+        <p id="feedbackExplanation" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+        <button id="nextBtn" onclick="nextQuestion()" class="self-end py-2.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 btn-press text-sm sm:text-base">
+          Siguiente Pregunta ➔
+        </button>
+      </div>
+
+    </section>
+
+    <!-- PANTALLA DE RESULTADOS -->
+    <section id="resultScreen" class="w-full max-w-md hidden flex-col items-center text-center p-6 sm:p-8 bg-slate-800 border border-slate-700 rounded-3xl shadow-2xl space-y-6">
+      <div id="resultIcon" class="text-6xl sm:text-7xl">🎉</div>
+      
+      <div class="space-y-2">
+        <h2 id="resultTitle" class="text-2xl sm:text-4xl font-extrabold text-white">¡Nivel Completado!</h2>
+        <p id="resultSubtitle" class="text-slate-300 text-sm sm:text-base">Demostraste un gran dominio del tema.</p>
+      </div>
+
+      <div class="bg-slate-900/70 w-full p-4 rounded-2xl border border-slate-700/60 space-y-2">
+        <div class="flex justify-between text-sm sm:text-base text-slate-400">
+          <span>Preguntas respondidas:</span>
+          <span id="finalScore" class="font-bold text-indigo-400">10 / 10</span>
+        </div>
+        <div class="flex justify-between text-sm sm:text-base text-slate-400">
+          <span>Vidas restantes:</span>
+          <span id="finalLives" class="font-bold text-rose-400">3 ❤️</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col w-full gap-3">
+        <button id="retryLevelBtn" onclick="restartCurrentLevel()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 btn-press text-sm sm:text-base">
+          Volver a Intentar
+        </button>
+        <button onclick="goToMenu()" class="w-full py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold rounded-xl btn-press text-sm sm:text-base">
+          Volver al Menú Principal
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="w-full py-3 text-center text-xs text-slate-500 border-t border-slate-800">
+    Aventura Matemática &copy; Juego Educativo
+  </footer>
+
+  <script>
+    // Sintetizador de Sonidos (Web Audio API)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Funciones SVG para opciones gráficas
+    function getCircleFractionSVG(numer, denom) {
+      const cx = 50, cy = 50, r = 38;
+      let paths = '';
+      for (let i = 0; i < denom; i++) {
+        const startAngle = (i * 360 / denom) - 90;
+        const endAngle = ((i + 1) * 360 / denom) - 90;
+        const x1 = cx + r * Math.cos(Math.PI * startAngle / 180);
+        const y1 = cy + r * Math.sin(Math.PI * startAngle / 180);
+        const x2 = cx + r * Math.cos(Math.PI * endAngle / 180);
+        const y2 = cy + r * Math.sin(Math.PI * endAngle / 180);
+        const largeArc = (endAngle - startAngle > 180) ? 1 : 0;
+        const fillColor = i < numer ? '#6366f1' : '#334155';
+        
+        if (denom === 1) {
+          paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fillColor}" stroke="#f8fafc" stroke-width="2"/>`;
+        } else {
+          paths += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z" fill="${fillColor}" stroke="#f8fafc" stroke-width="2"/>`;
+        }
+      }
+      return `<svg viewBox="0 0 100 100" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto drop-shadow">${paths}</svg>`;
+    }
+
+    function getBarFractionSVG(numer, denom) {
+      const width = 120, height = 36;
+      const cellWidth = width / denom;
+      let rects = '';
+      for (let i = 0; i < denom; i++) {
+        const fillColor = i < numer ? '#10b981' : '#334155';
+        rects += `<rect x="${i * cellWidth}" y="0" width="${cellWidth}" height="${height}" fill="${fillColor}" stroke="#f8fafc" stroke-width="2" rx="2"/>`;
+      }
+      return `<svg viewBox="0 0 ${width} ${height}" class="w-28 h-10 sm:w-36 sm:h-12 mx-auto drop-shadow"><g>${rects}</g></svg>`;
+    }
+
+    function getTriangleSVG(type, anglesText = "") {
+      let pathD = "M 50 15 L 85 80 L 15 80 Z";
+      if (type === 'isosceles') pathD = "M 50 10 L 80 85 L 20 85 Z";
+      if (type === 'escaleno') pathD = "M 20 20 L 85 85 L 10 80 Z";
+      if (type === 'rectangulo') pathD = "M 20 15 L 85 85 L 20 85 Z";
+      if (type === 'obtusangulo') pathD = "M 15 80 L 90 80 L 30 35 Z";
+
+      let textElement = "";
+      if (anglesText) {
+        textElement = `<text x="50" y="94" font-size="10" font-weight="bold" fill="#f8fafc" text-anchor="middle">${anglesText}</text>`;
+      }
+
+      return `
+        <svg viewBox="0 0 100 100" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto drop-shadow">
+          <path d="${pathD}" fill="#1e293b" stroke="#38bdf8" stroke-width="3.5" stroke-linejoin="round"/>
+          ${textElement}
+        </svg>
+      `;
+    }
+
+    // PREGUNTAS DEL JUEGO
+    const rawQuestionsLevel1 = [
+      {
+        q: "¿Qué imagen representa la fracción 1/2?",
+        opts: [
+          { svg: getCircleFractionSVG(1, 2), correct: true },
+          { svg: getCircleFractionSVG(1, 4), correct: false },
+          { svg: getCircleFractionSVG(3, 4), correct: false },
+          { svg: getCircleFractionSVG(2, 3), correct: false }
+        ],
+        exp: "1/2 significa 1 parte pintada de 2 partes iguales."
+      },
+      {
+        q: "¿Cuál de estas barras representa la fracción 3/4?",
+        opts: [
+          { svg: getBarFractionSVG(3, 4), correct: true },
+          { svg: getBarFractionSVG(1, 4), correct: false },
+          { svg: getBarFractionSVG(2, 4), correct: false },
+          { svg: getBarFractionSVG(4, 4), correct: false }
+        ],
+        exp: "3/4 son 3 casillas pintadas de 4."
+      },
+      {
+        q: "¿Qué gráfico representa 1/3?",
+        opts: [
+          { svg: getCircleFractionSVG(1, 3), correct: true },
+          { svg: getCircleFractionSVG(2, 3), correct: false },
+          { svg: getCircleFractionSVG(1, 2), correct: false },
+          { svg: getCircleFractionSVG(1, 4), correct: false }
+        ],
+        exp: "Un tercio es dividir en 3 partes y pintar 1."
+      },
+      {
+        q: "Si divides una figura en 4 partes y pintas 2, ¿cuál es su gráfico?",
+        opts: [
+          { svg: getCircleFractionSVG(2, 4), correct: true },
+          { svg: getCircleFractionSVG(1, 4), correct: false },
+          { svg: getCircleFractionSVG(3, 4), correct: false },
+          { svg: getCircleFractionSVG(4, 4), correct: false }
+        ],
+        exp: "2/4 representa 2 partes coloreadas de un total de 4."
+      },
+      {
+        q: "¿Cuál gráfico indica la unidad completa (4/4)?",
+        opts: [
+          { svg: getBarFractionSVG(4, 4), correct: true },
+          { svg: getBarFractionSVG(3, 4), correct: false },
+          { svg: getBarFractionSVG(2, 4), correct: false },
+          { svg: getBarFractionSVG(1, 4), correct: false }
+        ],
+        exp: "4/4 significa que las 4 casillas están completamente pintadas."
+      },
+      {
+        q: "¿Qué imagen representa la fracción 2/3?",
+        opts: [
+          { svg: getCircleFractionSVG(2, 3), correct: true },
+          { svg: getCircleFractionSVG(1, 3), correct: false },
+          { svg: getCircleFractionSVG(1, 2), correct: false },
+          { svg: getCircleFractionSVG(3, 4), correct: false }
+        ],
+        exp: "2/3 significa tomar 2 partes de 3."
+      },
+      {
+        q: "¿Cuál gráfico representa la menor cantidad pintada?",
+        opts: [
+          { svg: getBarFractionSVG(1, 4), correct: true },
+          { svg: getBarFractionSVG(2, 4), correct: false },
+          { svg: getBarFractionSVG(3, 4), correct: false },
+          { svg: getBarFractionSVG(4, 4), correct: false }
+        ],
+        exp: "1/4 es solo una casilla, la cantidad más pequeña."
+      },
+      {
+        q: "Identifica la figura que muestra 3/5 partes pintadas:",
+        opts: [
+          { svg: getBarFractionSVG(3, 5), correct: true },
+          { svg: getBarFractionSVG(1, 5), correct: false },
+          { svg: getBarFractionSVG(2, 5), correct: false },
+          { svg: getBarFractionSVG(4, 5), correct: false }
+        ],
+        exp: "3 de las 5 casillas de la barra están pintadas de verde."
+      },
+      {
+        q: "¿Qué gráfico representa 1/6 parte coloreada?",
+        opts: [
+          { svg: getCircleFractionSVG(1, 6), correct: true },
+          { svg: getCircleFractionSVG(2, 6), correct: false },
+          { svg: getCircleFractionSVG(3, 6), correct: false },
+          { svg: getCircleFractionSVG(5, 6), correct: false }
+        ],
+        exp: "Está dividido en 6 partes iguales y solo 1 está seleccionada."
+      },
+      {
+        q: "¿Cuál de estos gráficos representa la fracción 5/6?",
+        opts: [
+          { svg: getBarFractionSVG(5, 6), correct: true },
+          { svg: getBarFractionSVG(2, 6), correct: false },
+          { svg: getBarFractionSVG(3, 6), correct: false },
+          { svg: getBarFractionSVG(1, 6), correct: false }
+        ],
+        exp: "5 partes pintadas sobre un total de 6 casillas."
+      }
+    ];
+
+    const rawQuestionsLevel2 = [
+      {
+        q: "¿Cuál de estas imágenes muestra un triángulo Equilátero? (Todos sus ángulos miden 60°)",
+        opts: [
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: true },
+          { svg: getTriangleSVG('isosceles', '70° 70° 40°'), correct: false },
+          { svg: getTriangleSVG('escaleno', '80° 60° 40°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 45° 45°'), correct: false }
+        ],
+        exp: "El triángulo equilátero tiene sus tres ángulos de 60°."
+      },
+      {
+        q: "¿Cuál triángulo es Isósceles? (Tiene dos ángulos iguales)",
+        opts: [
+          { svg: getTriangleSVG('isosceles', '70° 70° 40°'), correct: true },
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('escaleno', '80° 60° 40°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 50° 40°'), correct: false }
+        ],
+        exp: "El triángulo isósceles tiene dos ángulos exactamente iguales (70° y 70°)."
+      },
+      {
+        q: "¿Cuál corresponde a un triángulo Escaleno? (Todos sus ángulos son distintos)",
+        opts: [
+          { svg: getTriangleSVG('escaleno', '80° 60° 40°'), correct: true },
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('isosceles', '50° 50° 80°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 45° 45°'), correct: false }
+        ],
+        exp: "El triángulo escaleno tiene sus 3 ángulos con medidas distintas."
+      },
+      {
+        q: "¿Cuál es un triángulo Rectángulo? (Tiene un ángulo recto de 90°)",
+        opts: [
+          { svg: getTriangleSVG('rectangulo', '90° 60° 30°'), correct: true },
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('isosceles', '80° 50° 50°'), correct: false },
+          { svg: getTriangleSVG('obtusangulo', '110° 40° 30°'), correct: false }
+        ],
+        exp: "Un triángulo rectángulo siempre tiene un ángulo de 90°."
+      },
+      {
+        q: "¿Cuánto suman SIEMPRE los tres ángulos internos de cualquier triángulo?",
+        graphicSVG: `
+          <svg viewBox="0 0 120 70" class="w-32 h-16 mx-auto">
+            <path d="M 15 55 L 105 55 L 60 15 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+            <text x="30" y="50" font-size="9" fill="#f8fafc" font-weight="bold">A</text>
+            <text x="90" y="50" font-size="9" fill="#f8fafc" font-weight="bold">B</text>
+            <text x="60" y="28" font-size="9" fill="#f8fafc" font-weight="bold">C</text>
+            <text x="60" y="65" font-size="9" fill="#38bdf8" font-weight="bold" text-anchor="middle">A + B + C = ¿?</text>
+          </svg>
+        `,
+        opts: [
+          { text: "180°", correct: true },
+          { text: "90°", correct: false },
+          { text: "360°", correct: false },
+          { text: "100°", correct: false }
+        ],
+        exp: "Los 3 ángulos internos de cualquier triángulo siempre suman 180°."
+      },
+      {
+        q: "Si dos ángulos de un triángulo miden 60° y 60°, ¿cuánto mide el tercero?",
+        graphicSVG: `
+          <svg viewBox="0 0 120 70" class="w-32 h-16 mx-auto">
+            <path d="M 20 55 L 100 55 L 60 15 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+            <text x="32" y="50" font-size="9" fill="#f8fafc" font-weight="bold">60°</text>
+            <text x="80" y="50" font-size="9" fill="#f8fafc" font-weight="bold">60°</text>
+            <text x="60" y="28" font-size="9" fill="#38bdf8" font-weight="bold">¿?</text>
+          </svg>
+        `,
+        opts: [
+          { text: "60°", correct: true },
+          { text: "90°", correct: false },
+          { text: "45°", correct: false },
+          { text: "80°", correct: false }
+        ],
+        exp: "60° + 60° = 120°. Para llegar a 180° faltan 60°."
+      },
+      {
+        q: "¿Cuál de las figuras es un triángulo Obtusángulo? (Tiene un ángulo mayor a 90°)",
+        opts: [
+          { svg: getTriangleSVG('obtusangulo', '120° 30° 30°'), correct: true },
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 45° 45°'), correct: false },
+          { svg: getTriangleSVG('isosceles', '70° 70° 40°'), correct: false }
+        ],
+        exp: "Tiene un ángulo abierto mayor a 90° (120°)."
+      },
+      {
+        q: "Un triángulo tiene un ángulo de 90° y otro de 40°. ¿Cuánto mide el tercero?",
+        graphicSVG: `
+          <svg viewBox="0 0 120 70" class="w-32 h-16 mx-auto">
+            <path d="M 25 15 L 95 55 L 25 55 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+            <text x="32" y="48" font-size="9" fill="#f8fafc" font-weight="bold">90°</text>
+            <text x="75" y="50" font-size="9" fill="#f8fafc" font-weight="bold">40°</text>
+            <text x="32" y="28" font-size="9" fill="#38bdf8" font-weight="bold">¿?</text>
+          </svg>
+        `,
+        opts: [
+          { text: "50°", correct: true },
+          { text: "40°", correct: false },
+          { text: "60°", correct: false },
+          { text: "90°", correct: false }
+        ],
+        exp: "90° + 40° = 130°. Le faltan 50° para completar los 180°."
+      },
+      {
+        q: "¿Cuál triángulo es Acutángulo? (Sus 3 ángulos son menores a 90°)",
+        opts: [
+          { svg: getTriangleSVG('equilatero', '70° 60° 50°'), correct: true },
+          { svg: getTriangleSVG('rectangulo', '90° 60° 30°'), correct: false },
+          { svg: getTriangleSVG('obtusangulo', '100° 50° 30°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 45° 45°'), correct: false }
+        ],
+        exp: "Sus 3 ángulos (70°, 60° y 50°) son menores a 90°."
+      },
+      {
+        q: "Si un triángulo tiene ángulos de 50°, 60° y 70°, ¿qué tipo de triángulo es?",
+        opts: [
+          { svg: getTriangleSVG('escaleno', '50° 60° 70°'), correct: true },
+          { svg: getTriangleSVG('equilatero', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('isosceles', '60° 60° 60°'), correct: false },
+          { svg: getTriangleSVG('rectangulo', '90° 45° 45°'), correct: false }
+        ],
+        exp: "Tener los 3 ángulos diferentes lo convierte en un triángulo Escaleno."
+      }
+    ];
+
+    // NUEVO NIVEL 3: Cantidades más grandes, directo y limpio
+    const rawQuestionsLevel3 = [
+      {
+        q: "¿Cuánto es 1.200 dividido en 25?",
+        opts: [
+          { text: "48", correct: true },
+          { text: "42", correct: false },
+          { text: "54", correct: false },
+          { text: "38", correct: false }
+        ],
+        exp: "1.200 ÷ 25 = 48 (puedes comprobarlo pensando que en 100 hay cuatro 25, así que 12 × 4 = 48)."
+      },
+      {
+        q: "¿Cuánto da multiplicar 120 por 15?",
+        opts: [
+          { text: "1.800", correct: true },
+          { text: "1.500", correct: false },
+          { text: "2.100", correct: false },
+          { text: "1.650", correct: false }
+        ],
+        exp: "120 × 10 = 1.200, y la mitad es 600. Sumando ambos: 1.200 + 600 = 1.800."
+      },
+      {
+        q: "¿Cuánto es 2.500 dividido en 50?",
+        opts: [
+          { text: "50", correct: true },
+          { text: "40", correct: false },
+          { text: "25", correct: false },
+          { text: "60", correct: false }
+        ],
+        exp: "Cancelas un cero en ambos números (250 ÷ 5) y obtienes 50."
+      },
+      {
+        q: "¿Cuál es el resultado de 15 al cuadrado (15²)?",
+        opts: [
+          { text: "225", correct: true },
+          { text: "200", correct: false },
+          { text: "150", correct: false },
+          { text: "250", correct: false }
+        ],
+        exp: "15 multiplicado por sí mismo: 15 × 15 = 225."
+      },
+      {
+        q: "¿Cuál es la raíz cuadrada de 400 (√400)?",
+        opts: [
+          { text: "20", correct: true },
+          { text: "40", correct: false },
+          { text: "10", correct: false },
+          { text: "30", correct: false }
+        ],
+        exp: "20 × 20 = 400, por lo que √400 = 20."
+      },
+      {
+        q: "¿Cuánto resulta de dividir 1.800 entre 40?",
+        opts: [
+          { text: "45", correct: true },
+          { text: "40", correct: false },
+          { text: "50", correct: false },
+          { text: "35", correct: false }
+        ],
+        exp: "1.800 ÷ 40 es igual a 180 ÷ 4 = 45."
+      },
+      {
+        q: "¿Cuánto da la operación 20 al cuadrado (20²)?",
+        opts: [
+          { text: "400", correct: true },
+          { text: "200", correct: false },
+          { text: "800", correct: false },
+          { text: "40", correct: false }
+        ],
+        exp: "20 × 20 = 400."
+      },
+      {
+        q: "¿Cuánto es 3.600 dividido en 60?",
+        opts: [
+          { text: "60", correct: true },
+          { text: "50", correct: false },
+          { text: "70", correct: false },
+          { text: "600", correct: false }
+        ],
+        exp: "3.600 ÷ 60 equivale a 360 ÷ 6 = 60."
+      },
+      {
+        q: "¿Cuál es la raíz cuadrada de 900 (√900)?",
+        opts: [
+          { text: "30", correct: true },
+          { text: "90", correct: false },
+          { text: "300", correct: false },
+          { text: "45", correct: false }
+        ],
+        exp: "El número 30 multiplicado por sí mismo (30 × 30) da 900."
+      },
+      {
+        q: "¿Cuánto es 1.500 dividido en 30?",
+        opts: [
+          { text: "50", correct: true },
+          { text: "45", correct: false },
+          { text: "500", correct: false },
+          { text: "30", correct: false }
+        ],
+        exp: "1.500 ÷ 30 = 150 ÷ 3 = 50."
+      }
+    ];
+
+    // ESTADO DEL JUEGO
+    let currentLevel = 1;
+    let questions = [];
+    let currentQIndex = 0;
+    let lives = 3;
+    let answeredCurrent = false;
+
+    function goToMenu() {
+      document.getElementById('menuScreen').classList.remove('hidden');
+      document.getElementById('gameplayScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('gameHUD').classList.add('hidden');
+    }
+
+    function startLevel(lvl) {
+      currentLevel = lvl;
+      lives = 3;
+      currentQIndex = 0;
+
+      let rawData = [];
+      if (lvl === 1) rawData = rawQuestionsLevel1;
+      if (lvl === 2) rawData = rawQuestionsLevel2;
+      if (lvl === 3) rawData = rawQuestionsLevel3;
+
+      // Desordenar preguntas y opciones aleatoriamente
+      questions = shuffleArray(rawData).map(qItem => ({
+        ...qItem,
+        opts: shuffleArray(qItem.opts)
+      }));
+
+      document.getElementById('menuScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('gameplayScreen').classList.remove('hidden');
+      document.getElementById('gameplayScreen').classList.add('flex');
+      document.getElementById('gameHUD').classList.remove('hidden');
+
+      const badge = document.getElementById('levelBadge');
+      if (lvl === 1) {
+        badge.innerText = "Nivel 1: Fracciones";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      } else if (lvl === 2) {
+        badge.innerText = "Nivel 2: Ángulos y Triángulos";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30";
+      } else {
+        badge.innerText = "Nivel 3: Divisiones y Potencias";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30";
+      }
+
+      updateLivesHUD();
+      renderQuestion();
+    }
+
+    function restartCurrentLevel() {
+      startLevel(currentLevel);
+    }
+
+    function updateLivesHUD() {
+      const container = document.getElementById('heartsContainer');
+      let heartsHTML = '';
+      for (let i = 0; i < 3; i++) {
+        if (i < lives) {
+          heartsHTML += `<span class="text-rose-500 text-base sm:text-xl transition-transform duration-300 transform scale-110">❤️</span>`;
+        } else {
+          heartsHTML += `<span class="text-slate-600 text-base sm:text-xl opacity-40">🖤</span>`;
+        }
+      }
+      container.innerHTML = heartsHTML;
+    }
+
+    function renderQuestion() {
+      answeredCurrent = false;
+      document.getElementById('feedbackContainer').classList.add('hidden');
+      document.getElementById('feedbackContainer').classList.remove('flex');
+      document.getElementById('currentQuestionNum').innerText = currentQIndex + 1;
+
+      const q = questions[currentQIndex];
+
+      document.getElementById('questionText').innerText = q.q;
+
+      const graphicContainer = document.getElementById('questionGraphicContainer');
+      const graphicBox = document.getElementById('questionGraphic');
+      if (q.graphicSVG) {
+        graphicBox.innerHTML = q.graphicSVG;
+        graphicContainer.classList.remove('hidden');
+        graphicContainer.classList.add('flex');
+      } else {
+        graphicContainer.classList.add('hidden');
+        graphicContainer.classList.remove('flex');
+      }
+
+      const optionsGrid = document.getElementById('optionsGrid');
+      optionsGrid.innerHTML = '';
+
+      q.opts.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = "group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700/80 hover:border-indigo-500/60 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center transition duration-150 btn-press min-h-[90px] shadow-md";
+        btn.onclick = () => selectOption(opt, btn);
+
+        if (opt.svg) {
+          btn.innerHTML = `<div class="w-full flex justify-center items-center pointer-events-none">${opt.svg}</div>`;
+        } else {
+          btn.innerHTML = `<span class="text-base sm:text-xl font-bold text-slate-100 group-hover:text-white pointer-events-none">${opt.text}</span>`;
+        }
+
+        optionsGrid.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedOpt, clickedBtn) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = questions[currentQIndex];
+      const allButtons = document.getElementById('optionsGrid').children;
+
+      for (let btn of allButtons) {
+        btn.classList.remove('hover:bg-slate-700/80', 'hover:border-indigo-500/60', 'btn-press');
+        btn.classList.add('cursor-default');
+      }
+
+      const feedbackContainer = document.getElementById('feedbackContainer');
+      const feedbackHeader = document.getElementById('feedbackHeader');
+      const feedbackExplanation = document.getElementById('feedbackExplanation');
+
+      if (selectedOpt.correct) {
+        playSound('correct');
+        clickedBtn.classList.add('bg-emerald-900/40', 'border-emerald-500', 'ring-2', 'ring-emerald-500/50');
+        
+        feedbackHeader.className = "flex items-center gap-2 font-bold text-base sm:text-lg text-emerald-400";
+        feedbackHeader.innerHTML = `<span>✅</span> <span>¡Correcto! ¡Excelente trabajo!</span>`;
+      } else {
+        playSound('wrong');
+        lives--;
+        updateLivesHUD();
+        clickedBtn.classList.add('bg-rose-900/40', 'border-rose-500', 'ring-2', 'ring-rose-500/50');
+
+        q.opts.forEach((o, i) => {
+          if (o.correct) {
+            allButtons[i].classList.add('bg-emerald-900/20', 'border-emerald-500/60');
+          }
+        });
+
+        feedbackHeader.className = "flex items-center gap-2 font-bold text-base sm:text-lg text-rose-400";
+        feedbackHeader.innerHTML = `<span>❌</span> <span>¡Incorrecto! Perdiste 1 vida</span>`;
+      }
+
+      feedbackExplanation.innerText = q.exp;
+      feedbackContainer.classList.remove('hidden');
+      feedbackContainer.classList.add('flex');
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (lives <= 0) {
+        nextBtn.innerText = "Ver Resultados ➔";
+      } else if (currentQIndex === questions.length - 1) {
+        nextBtn.innerText = "Finalizar Nivel ➔";
+      } else {
+        nextBtn.innerText = "Siguiente Pregunta ➔";
+      }
+    }
+
+    function nextQuestion() {
+      if (lives <= 0 || currentQIndex >= questions.length - 1) {
+        showResults();
+      } else {
+        currentQIndex++;
+        renderQuestion();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('gameplayScreen').classList.add('hidden');
+      document.getElementById('gameHUD').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('resultScreen').classList.add('flex');
+
+      const title = document.getElementById('resultTitle');
+      const subtitle = document.getElementById('resultSubtitle');
+      const icon = document.getElementById('resultIcon');
+      const finalScore = document.getElementById('finalScore');
+      const finalLives = document.getElementById('finalLives');
+
+      finalScore.innerText = `${currentQIndex + (lives > 0 ? 1 : 0)} / 10`;
+      finalLives.innerText = `${lives > 0 ? lives : 0} ❤️`;
+
+      if (lives > 0) {
+        icon.innerText = "🏆";
+        title.innerText = "¡Nivel Superado!";
+        title.className = "text-2xl sm:text-4xl font-extrabold text-emerald-400";
+        subtitle.innerText = "¡Felicidades! Completaste este nivel con éxito.";
+      } else {
+        icon.innerText = "💔";
+        title.innerText = "¡Sin Vidas!";
+        title.className = "text-2xl sm:text-4xl font-extrabold text-rose-400";
+        subtitle.innerText = "Te has quedado sin vidas. ¡Sigue intentando para lograrlo!";
+      }
+    }
+  </script>
+</body>
+</html>
